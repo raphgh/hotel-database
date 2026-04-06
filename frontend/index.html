@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recherche de chambres</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<h1>Recherche de chambres</h1>
+
+<form id="searchForm">
+    
+    <label>Capacité:</label>
+    <input type="number" name="capacite">
+
+    <label>Prix max:</label>
+    <input type="number" name="prix">
+
+    <label>Catégorie:</label>
+    <select name="categorie">
+        <option value="">Toutes</option>
+        <option value="3">3 étoiles</option>
+        <option value="4">4 étoiles</option>
+        <option value="5">5 étoiles</option>
+    </select>
+
+    <button type="submit">Rechercher</button>
+</form>
+
+<div id="results"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
