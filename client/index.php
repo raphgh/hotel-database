@@ -13,7 +13,7 @@ if (isset($_GET['ville'])) {
     $prix_max = $_GET['prix_max'] ?? '';
     $chaine = $_GET['chaine'] ?? '';
     $etoiles = $_GET['etoiles'] ?? '';
-    $nb_chambres = $_GET['no_chambres'] ?? '';
+    $no_chambres = $_GET['no_chambres'] ?? '';
 
     $query = "SELECT * FROM Chambre c JOIN Hotel h USING(id_hotel) WHERE 1=1";
     $params = [];
@@ -24,7 +24,7 @@ if (isset($_GET['ville'])) {
         $params[] = $ville;
     }
 
-    if (!empty($capacite)) {
+    if ($capacite !== '') {
         $query .= " AND c.capacite = $" . $count++; 
         $params[] = (int)$capacite;
     }
@@ -92,7 +92,7 @@ if (isset($_GET['ville'])) {
                 <input type="date" id="end" name="stay-end" value="2026-04-12" min="2024-04-12" required>
 
                 <label>Capacité</label>
-                <select name="etoiles">
+                <select name="capacite">
                     <option value="" disabled selected hidden># personnes</option>
                     <option type="number" value="1">1 personne</option>
                     <option type="number" value="2">2 personnes</option>
@@ -125,7 +125,7 @@ if (isset($_GET['ville'])) {
                         </select>
 
                     <label>Étoiles (Min):</label>
-                    <select name="categorie">
+                    <select name="etoiles">
                         <option value="">Toutes</option>
                         <option value="1">★</option>
                         <option value="2">★★</option>

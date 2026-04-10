@@ -109,7 +109,6 @@
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-/* Image Section */
 .card-image {
     flex: 1;
     min-width: 200px;
@@ -119,10 +118,10 @@
 .card-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Prevents image stretching */
+    object-fit: cover; 
 }
 
-/* Content Section */
+
 .card-content {
     flex: 2;
     padding: 20px;
@@ -147,7 +146,7 @@
     font-size: 1.2rem;
 }
 
-/* Price and Button Row */
+
 .card-footer {
     display: flex;
     justify-content: space-between;
