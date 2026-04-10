@@ -1,0 +1,176 @@
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.horizontal-card {
+    display: flex;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.horizontal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.card-image {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.card-content {
+    flex: 2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-header h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.address {
+    color: #666;
+    margin: 0 0 10px 0;
+}
+
+.stars {
+    color: #f1c40f; 
+    font-size: 1.2rem;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.price {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.btn-reserve {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-reserve:hover {
+    background-color: #0056b3;
+}/* Container for all cards */
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* The Horizontal Card */
+.horizontal-card {
+    display: flex;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.horizontal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Image Section */
+.card-image {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Prevents image stretching */
+}
+
+/* Content Section */
+.card-content {
+    flex: 2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-header h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.address {
+    color: #666;
+    margin: 0 0 10px 0;
+}
+
+.stars {
+    color: #f1c40f; 
+    font-size: 1.2rem;
+}
+
+/* Price and Button Row */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.price {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.btn-reserve {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-reserve:hover {
+    background-color: #0056b3;
+}
