@@ -108,6 +108,7 @@ if (isset($_GET['ville'])) {
             <div class="filters">
                 <form action="index.php" method="GET">
                     <input type="hidden" name="ville" value="<?php echo htmlspecialchars($_GET['ville'] ?? ''); ?>">
+                    <input type="hidden" name="capacite" value="<?php echo htmlspecialchars($_GET['capacite'] ?? ''); ?>">
                     
                     <h3>Filtres</h3>
 

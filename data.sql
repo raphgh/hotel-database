@@ -1,7 +1,10 @@
 --
--- PostgreSQL database 
+-- PostgreSQL database dump
 --
 
+--
+-- Name: archive; Type: TABLE; Schema: public; Owner: postgres
+--
 
 CREATE TABLE public.archive (
     id_archive bigint NOT NULL,
@@ -42,7 +45,6 @@ CREATE TABLE public.chambre (
     etat text
 );
 
-
 --
 -- Name: client; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -56,7 +58,6 @@ CREATE TABLE public.client (
     email character varying(255),
     telephone character varying(20)
 );
-
 
 --
 -- Name: employe; Type: TABLE; Schema: public; Owner: postgres
@@ -83,9 +84,9 @@ CREATE TABLE public.hotel (
     email character varying(255),
     telephone character varying(20),
     id_gestionnaire bigint,
-    categorie integer
+    categorie integer,
+    nom_hotel character varying(255)
 );
-
 
 --
 -- Name: location; Type: TABLE; Schema: public; Owner: postgres
@@ -103,6 +104,7 @@ CREATE TABLE public.location (
     id_hotel bigint,
     id_chaine bigint
 );
+
 
 --
 -- Name: reservation; Type: TABLE; Schema: public; Owner: postgres
@@ -133,11 +135,11 @@ COPY public.archive (id_archive, type, nom_client, dates, id_reservation, id_loc
 --
 
 COPY public."chaines_hotelières" (id_chaine, nom_chaine, adresse_siege_social, num_hotels, email, telephone) FROM stdin;
-1	Hilton	123 rue Principale, Montreal	8	contact@hilton.com	514-000-0001
-2	Marriott	456 rue Parlement, Ottawa	12	contact@marriot.com	613-000-0001
 3	Best Western	789 rue Scotiabank, Toronto	10	contact@bestwestern.com	416-000-0001
 4	Hyatt	368 avenue Bridgeport, Vancouver	8	contact@hyatt.com	604-000-0001
 5	Wyndham	246 promenade Memorial, Calgary	11	contact@wyndham.com	403-000-0001
+1	Marriott	456 rue Parlement, Ottawa	12	contact@marriot.com	613-000-0001
+2	Hilton	123 rue Principale, Montreal	8	contact@hilton.com	514-000-0001
 \.
 
 
@@ -408,47 +410,47 @@ COPY public.employe (id_employe, nom_complet, adresse, nas_employe, role, id_hot
 -- Data for Name: hotel; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.hotel (id_hotel, id_chaine, adresse, no_chambre, email, telephone, id_gestionnaire, categorie) FROM stdin;
-1	1	111 boulevard René-Lévesque, Montréal	5	h1@marriott.com	514-001-0001	1	5
-2	1	222 rue Sherbrooke, Montréal	6	h2@marriott.com	514-001-0002	1	5
-3	1	333 rue King, Toronto	7	h3@marriott.com	416-001-0003	1	5
-4	1	444 avenue Victoria, Vancouver	5	h4@marriott.com	604-001-0004	1	4
-5	1	555 rue Rideau, Ottawa	6	h5@marriott.com	613-001-0005	1	3
-6	1	666 avenue Décarie, Calgary	7	h6@marriott.com	403-001-0006	1	2
-7	1	777 rue Saint-Jean, Québec	5	h7@marriott.com	418-001-0007	1	1
-8	1	888 rue Main, Halifax	6	h8@marriott.com	902-001-0008	1	4
-9	2	123 rue Sainte-Catherine, Montréal	7	h1@hilton.com	514-002-0001	2	4
-10	2	234 rue Peel, Montréal	5	h2@hilton.com	514-002-0002	2	4
-11	2	345 avenue Portage, Winnipeg	6	h3@hilton.com	204-002-0003	2	4
-12	2	456 rue University, Toronto	7	h4@hilton.com	416-002-0004	2	5
-13	2	567 rue Granville, Vancouver	5	h5@hilton.com	604-002-0005	2	3
-14	2	678 avenue Laurier, Ottawa	6	h6@hilton.com	613-002-0006	2	2
-15	2	789 rue Spring Garden, Halifax	7	h7@hilton.com	902-002-0007	2	1
-16	2	890 rue Victoria, Regina	5	h8@hilton.com	306-002-0008	2	5
-17	3	101 rue Drummond, Montréal	6	h1@hyatt.com	514-003-0001	3	3
-18	3	202 avenue du Mont-Royal, Montréal	7	h2@hyatt.com	514-003-0002	3	5
-19	3	303 rue Yonge, Toronto	5	h3@hyatt.com	416-003-0003	3	5
-20	3	404 avenue Robson, Vancouver	6	h4@hyatt.com	604-003-0004	3	5
-21	3	505 rue Wellington, Ottawa	7	h5@hyatt.com	613-003-0005	3	4
-22	3	606 avenue 17th, Calgary	5	h6@hyatt.com	403-003-0006	3	3
-23	3	707 rue Whyte, Edmonton	6	h7@hyatt.com	780-003-0007	3	2
-24	3	808 rue Notre-Dame, Winnipeg	7	h8@hyatt.com	204-003-0008	3	1
-25	4	111 rue Saint-Urbain, Toronto	5	h1@bestwestern.com	416-004-0001	4	2
-26	4	222 avenue Bay, Toronto	6	h2@bestwestern.com	416-004-0002	4	2
-27	4	333 rue Rideau, Ottawa	7	h3@bestwestern.com	613-004-0003	4	2
-28	4	444 rue Saint-Jean, Québec	5	h4@bestwestern.com	418-004-0004	4	3
-29	4	555 avenue Ste-Anne, Halifax	6	h5@bestwestern.com	902-004-0005	4	4
-30	4	666 rue Granville, Vancouver	7	h6@bestwestern.com	604-004-0006	4	5
-31	4	777 avenue Macleod, Calgary	5	h7@bestwestern.com	403-004-0007	4	1
-32	4	888 rue Jasper, Edmonton	6	h8@bestwestern.com	780-004-0008	4	4
-33	5	123 rue de la Montagne, Vancouver	7	h1@wyndham.com	604-005-0001	5	1
-34	5	234 avenue Burrard, Vancouver	5	h2@wyndham.com	604-005-0002	5	1
-35	5	345 rue Principale, Québec	6	h3@wyndham.com	418-005-0003	5	5
-36	5	456 boulevard Décarie, Montréal	7	h4@wyndham.com	514-005-0004	5	4
-37	5	567 rue King, Hamilton	5	h5@wyndham.com	905-005-0005	5	3
-38	5	678 avenue des Pins, Ottawa	6	h6@wyndham.com	613-005-0006	5	2
-39	5	789 rue Princess, Winnipeg	7	h7@wyndham.com	204-005-0007	5	3
-40	5	890 rue South Park, Halifax	5	h8@wyndham.com	902-005-0008	5	3
+COPY public.hotel (id_hotel, id_chaine, adresse, no_chambre, email, telephone, id_gestionnaire, categorie, nom_hotel) FROM stdin;
+5	1	555 rue Rideau, Ottawa	6	h5@marriott.com	613-001-0005	1	3	Marriott Ottawa Rideau
+6	1	666 avenue Décarie, Calgary	7	h6@marriott.com	403-001-0006	1	2	Marriott Calgary Downtown
+7	1	777 rue Saint-Jean, Québec	5	h7@marriott.com	418-001-0007	1	1	Marriott Québec Vieux-Port
+8	1	888 rue Main, Halifax	6	h8@marriott.com	902-001-0008	1	4	Marriott Halifax Harbourfront
+16	2	890 rue Victoria, Regina	5	h8@hilton.com	306-002-0008	2	5	Hilton Regina Plaza
+17	3	101 rue Drummond, Montréal	6	h1@hyatt.com	514-003-0001	3	3	Hyatt Regency Montréal
+18	3	202 avenue du Mont-Royal, Montréal	7	h2@hyatt.com	514-003-0002	3	5	Hyatt Place Montréal Mont-Royal
+19	3	303 rue Yonge, Toronto	5	h3@hyatt.com	416-003-0003	3	5	Hyatt Regency Toronto
+20	3	404 avenue Robson, Vancouver	6	h4@hyatt.com	604-003-0004	3	5	Hyatt Regency Vancouver
+21	3	505 rue Wellington, Ottawa	7	h5@hyatt.com	613-003-0005	3	4	Hyatt Place Ottawa
+22	3	606 avenue 17th, Calgary	5	h6@hyatt.com	403-003-0006	3	3	Hyatt House Calgary
+23	3	707 rue Whyte, Edmonton	6	h7@hyatt.com	780-003-0007	3	2	Hyatt Place Edmonton Whyte
+24	3	808 rue Notre-Dame, Winnipeg	7	h8@hyatt.com	204-003-0008	3	1	Hyatt House Winnipeg
+25	4	111 rue Saint-Urbain, Toronto	5	h1@bestwestern.com	416-004-0001	4	2	Best Western Plus Toronto Airport
+26	4	222 avenue Bay, Toronto	6	h2@bestwestern.com	416-004-0002	4	2	Best Western Toronto Bay
+27	4	333 rue Rideau, Ottawa	7	h3@bestwestern.com	613-004-0003	4	2	Best Western Plus Ottawa
+28	4	444 rue Saint-Jean, Québec	5	h4@bestwestern.com	418-004-0004	4	3	Best Western Québec City
+29	4	555 avenue Ste-Anne, Halifax	6	h5@bestwestern.com	902-004-0005	4	4	Best Western Plus Halifax
+30	4	666 rue Granville, Vancouver	7	h6@bestwestern.com	604-004-0006	4	5	Best Western Vancouver Granville
+31	4	777 avenue Macleod, Calgary	5	h7@bestwestern.com	403-004-0007	4	1	Best Western Calgary Macleod
+32	4	888 rue Jasper, Edmonton	6	h8@bestwestern.com	780-004-0008	4	4	Best Western Plus Edmonton Jasper
+33	5	123 rue de la Montagne, Vancouver	7	h1@wyndham.com	604-005-0001	5	1	Wyndham Vancouver Montagne
+34	5	234 avenue Burrard, Vancouver	5	h2@wyndham.com	604-005-0002	5	1	Wyndham Vancouver Burrard
+35	5	345 rue Principale, Québec	6	h3@wyndham.com	418-005-0003	5	5	Wyndham Grand Québec
+36	5	456 boulevard Décarie, Montréal	7	h4@wyndham.com	514-005-0004	5	4	Wyndham Montréal Décarie
+37	5	567 rue King, Hamilton	5	h5@wyndham.com	905-005-0005	5	3	Wyndham Hamilton King
+38	5	678 avenue des Pins, Ottawa	6	h6@wyndham.com	613-005-0006	5	2	Wyndham Ottawa Garden
+39	5	789 rue Princess, Winnipeg	7	h7@wyndham.com	204-005-0007	5	3	Wyndham Winnipeg Downtown
+40	5	890 rue South Park, Halifax	5	h8@wyndham.com	902-005-0008	5	3	Wyndham Halifax South Park
+1	1	111 boulevard René-Lévesque, Montréal	5	h1@marriott.com	514-001-0001	1	5	Marriott Montréal Centre-Ville
+2	1	222 rue Sherbrooke, Montréal	6	h2@marriott.com	514-001-0002	1	5	Marriott Montréal Sherbrooke
+3	1	333 rue King, Toronto	7	h3@marriott.com	416-001-0003	1	5	Marriott Toronto King
+4	1	444 avenue Victoria, Vancouver	5	h4@marriott.com	604-001-0004	1	4	Marriott Vancouver Waterfront
+9	2	123 rue Sainte-Catherine, Montréal	7	h1@hilton.com	514-002-0001	2	4	Hilton Montréal Bonaventure
+10	2	234 rue Peel, Montréal	5	h2@hilton.com	514-002-0002	2	4	Hilton Montréal Midtown
+11	2	345 avenue Portage, Winnipeg	6	h3@hilton.com	204-002-0003	2	4	Hilton Winnipeg Airport Suites
+12	2	456 rue University, Toronto	7	h4@hilton.com	416-002-0004	2	5	Hilton Toronto Downtown
+13	2	567 rue Granville, Vancouver	5	h5@hilton.com	604-002-0005	2	3	Hilton Vancouver Granville
+14	2	678 avenue Laurier, Ottawa	6	h6@hilton.com	613-002-0006	2	2	Hilton Ottawa Laurier
+15	2	789 rue Spring Garden, Halifax	7	h7@hilton.com	902-002-0007	2	1	Hilton Halifax Garden Inn
 \.
 
 
