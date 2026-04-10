@@ -68,7 +68,7 @@ $my_bookings = pg_fetch_all($result) ?: [];
                                         </span>
                                     </div>
                                     <p style="font-size: 13px; margin-top: 10px; color: var(--muted);">
-                                        <b>Reservation:</b> Du <?php echo $row['date_debut']; ?> au <?php echo $row['date_fin']; ?>
+                                        <b>Séjour:</b> Du <?php echo $row['date_debut']; ?> au <?php echo $row['date_fin']; ?>
                                     </p>
                                 </div>
 
