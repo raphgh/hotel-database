@@ -9,13 +9,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_res'])) {
 
     pg_query($conn, "BEGIN");
 
-    $archiveQuery = "INSERT INTO archive (type, id_client, date_debut, date_fin, id_reservation)
+    $archiveQuery = "INSERT INTO archive (type, id_client, date_debut, date_fin, id_reservation, id_hotel)
                     SELECT 
                         'reservation', 
                         r.id_client,
                         r.date_debut, 
                         r.date_fin, 
-                        r.id_reservation
+                        r.id_reservation,
+                        r.id_hotel
                     FROM reservation r
                     WHERE r.id_reservation = $1";
 

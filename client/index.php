@@ -489,6 +489,7 @@ if (isset($_GET['ville'])) {
                                         <div class="card-header">
                                             <h4><b><?php echo $row['nom_hotel']; ?></b></h4>
                                             <p class="address"><?php echo $row['adresse']; ?></p>
+                                            <p class="address"><?php echo $row['vue']; ?></p>
                                             <div class="stars">
                                                 <?php echo str_repeat('★', (int)$row['categorie']); ?>
                                             </div>

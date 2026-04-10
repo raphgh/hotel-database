@@ -24,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($mot_de_passe === $user['mot_de_passe']) {
             $_SESSION['role'] = 'employe';
             $_SESSION['user_id'] = $user['id_employe'];
-            header("Location: employe/employee_vue.php");
+            $_SESSION['id_hotel'] = $user['id_hotel'];
+            header("Location: employe/liste_all_reservation.php");
             exit();
         } else {
             echo "Mot de passe incorrect.";
