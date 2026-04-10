@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include '../db.php';
@@ -14,6 +15,8 @@ if (isset($_GET['ville'])) {
     $chaine = $_GET['chaine'] ?? '';
     $etoiles = $_GET['etoiles'] ?? '';
     $no_chambres = $_GET['no_chambres'] ?? '';
+    $date_debut = $_GET['date_debut'] ?? '';
+    $date_fin = $_GET['date_fin'] ?? '';
 
     $query = "SELECT * FROM Chambre c JOIN Hotel h USING(id_hotel) WHERE 1=1";
     $params = [];
@@ -350,7 +353,16 @@ if (isset($_GET['ville'])) {
         </style>
         <nav>
             <h1>auberge.com</h1>
-            <a href="../login.php">Connexion</a>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="index.php">&#127968</a>
+        
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="liste_reservations.php">Mes Réservations</a>
+                    <a href="../logout.php">Déconnexion</a>
+                <?php else: ?>
+                    <a href="../login.php">Connexion</a>
+                <?php endif; ?>
+            </div>
         </nav>
     </head>
     <body>
@@ -379,11 +391,11 @@ if (isset($_GET['ville'])) {
                         </div>
                         <div class="field">
                             <label>Date d'arrivée</label>
-                            <input type="date" id="start" name="stay-start" value="2026-04-11" min="2024-04-11" required>
+                            <input type="date" id="start" name="date_debut" value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                         <div class="field">
                             <label>Date de sortie</label>
-                            <input type="date" id="end" name="stay-end" value="2026-04-12" min="2024-04-12" required>
+                            <input type="date" id="end" name="date_fin" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
                         </div>
                         <div class="field">
                             <label>Capacité</label>
@@ -410,8 +422,8 @@ if (isset($_GET['ville'])) {
                     <form action="index.php" method="GET">
                         <input type="hidden" name="ville" value="<?php echo htmlspecialchars($_GET['ville'] ?? ''); ?>">
                         <input type="hidden" name="capacite" value="<?php echo htmlspecialchars($_GET['capacite'] ?? ''); ?>">
-                        <input type="hidden" name="stay-start" value="<?php echo htmlspecialchars($_GET['stay-start'] ?? ''); ?>">
-                        <input type="hidden" name="stay-end" value="<?php echo htmlspecialchars($_GET['stay-end'] ?? ''); ?>">
+                        <input type="hidden" name="date_debut" value="<?php echo htmlspecialchars($_GET['date_debut'] ?? ''); ?>">
+                        <input type="hidden" name="date_fin" value="<?php echo htmlspecialchars($_GET['date_fin'] ?? ''); ?>">
 
                         <h3>Filtres</h3>
 
@@ -485,8 +497,15 @@ if (isset($_GET['ville'])) {
                                         <div class="card-footer">
                                             <h1 class="price"><?php echo $row['prix']; ?>$</h1>
 
-                                            <form action="add_reservation.php" method="POST">
-                                                <input type="hidden" name="id_chambre" value="<?php echo $row['num_chambre']; ?>">
+                                            <form action="paiement.php" method="POST">
+                                                <input type="hidden" name="num_chambre" value="<?php echo $row['num_chambre']; ?>">
+                                                <input type="hidden" name="hotel" value="<?php echo $row['id_hotel']; ?>">
+                                                <input type="hidden" name="chaine" value="<?php echo $row['id_chaine']; ?>">
+                                                <input type="hidden" name="prix" value="<?php echo $row['prix']; ?>">
+                                                
+                                                <input type="hidden" name="date_debut" value="<?php echo htmlspecialchars($_GET['date_debut'] ?? ''); ?>">
+                                                <input type="hidden" name="date_fin" value="<?php echo htmlspecialchars($_GET['date_fin'] ?? ''); ?>">
+
                                                 <button type="submit" class="btn-reserve">
                                                     Réserver maintenant
                                                 </button>
