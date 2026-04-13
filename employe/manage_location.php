@@ -42,7 +42,7 @@ $query .= " ORDER BY num_chambre ASC";
 $res = pg_query_params($conn, $query, $params);
 $results = pg_fetch_all($res) ?: [];
 $current_page = basename($_SERVER['PHP_SELF']);
-?>>
+?>
 
 <!DOCTYPE html>
 <html>
