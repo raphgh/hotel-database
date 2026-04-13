@@ -7,20 +7,33 @@ include '../db.php';
 $results = []; 
 $searched = false;
 
+$ville = $_GET['ville'] ?? '';
+$capacite = $_GET['capacite'] ?? 0;
+$prix_max = $_GET['prix_max'] ?? '';
+$chaine = $_GET['chaine'] ?? '';
+$etoiles = $_GET['etoiles'] ?? '';
+$no_chambres = $_GET['no_chambres'] ?? '';
+$date_debut = $_GET['date_debut'] ?? date('Y-m-d');
+$date_fin = $_GET['date_fin'] ?? date('Y-m-d', strtotime('+1 day'));
+
+
 if (isset($_GET['ville'])) {
     $searched = true;
-    $ville = $_GET['ville'] ?? '';
-    $capacite = $_GET['capacite'] ?? 0;
-    $prix_max = $_GET['prix_max'] ?? '';
-    $chaine = $_GET['chaine'] ?? '';
-    $etoiles = $_GET['etoiles'] ?? '';
-    $no_chambres = $_GET['no_chambres'] ?? '';
-    $date_debut = $_GET['date_debut'] ?? '';
-    $date_fin = $_GET['date_fin'] ?? '';
 
-    $query = "SELECT * FROM Chambre c JOIN Hotel h USING(id_hotel) WHERE 1=1";
+    $query = "SELECT * FROM Chambre c JOIN Hotel h USING(id_hotel) WHERE c.disponibilite = 'libre'";
     $params = [];
     $count = 1;
+
+    if (!empty($date_debut) && !empty($date_fin)) {
+        $query .= " AND c.num_chambre NOT IN (
+            SELECT num_chambre FROM reservation 
+            WHERE id_hotel = h.id_hotel 
+            AND date_debut < $" . ($count + 1) . " AND date_fin > $" . $count . "
+        )";
+        $params[] = $date_debut; 
+        $params[] = $date_fin;  
+        $count += 2;
+    }
 
     if (!empty($ville)) {
         $query .= " AND TRIM(SPLIT_PART(adresse, ',', 2)) = $" . $count++;
@@ -193,7 +206,7 @@ if (isset($_GET['ville'])) {
             .main {
                 max-width: 860px;
                 margin: 0 auto;
-                padding: 2rem 1rem 3rem;
+                padding: 2rem 1rem 0rem;
                 display: grid;
                 grid-template-columns: 210px 1fr;
                 gap: 1.5rem;
@@ -371,45 +384,38 @@ if (isset($_GET['ville'])) {
             <div class="hero-inner">
                 <h2>Où souhaitez-vous aller?</h2>
                 <form method="GET" action="index.php" id="searchForm">
-                    <div class="search-grid">
-                        <div class="field">
-                            <label>Ville</label>
-                            <select name="ville">
-                                <option value="" disabled selected hidden>Ville</option>
-                                <option value="Ottawa">Ottawa</option>
-                                <option value="Québec">Québec</option>
-                                <option value="Halifax">Halifax</option>
-                                <option value="Calgary">Calgary</option>
-                                <option value="Montréal">Montréal</option>
-                                <option value="Edmonton">Edmonton</option>
-                                <option value="Vancouver">Vancouver</option>
-                                <option value="Toronto">Toronto</option>
-                                <option value="Hamilton">Hamilton</option>
-                                <option value="Regina">Regina</option>
-                                <option value="Winnipeg">Winnipeg</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Date d'arrivée</label>
-                            <input type="date" id="start" name="date_debut" value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" required>
-                        </div>
-                        <div class="field">
-                            <label>Date de sortie</label>
-                            <input type="date" id="end" name="date_fin" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
-                        </div>
-                        <div class="field">
-                            <label>Capacité</label>
-                            <select name="capacite">
-                                <option value="" disabled selected hidden># personnes</option>
-                                <option type="number" value="1">1 personne</option>
-                                <option type="number" value="2">2 personnes</option>
-                                <option type="number" value="3">3 personnes</option>
-                                <option type="number" value="4">4 personnes</option>
-                                <option type="number" value="5">5 personnes</option>
-                                <option type="number" value="6">6 personnes</option>
-                            </select>
-                        </div>
+                <div class="search-grid">
+                    <div class="field">
+                        <label>Ville</label>
+                        <select name="ville">
+                            <option value="">Toutes</option>
+                            <?php
+                            $villes = ["Ottawa", "Québec", "Halifax", "Calgary", "Montréal", "Edmonton", "Vancouver", "Toronto", "Hamilton", "Regina", "Winnipeg"];
+                            foreach ($villes as $v): ?>
+                                <option value="<?= $v ?>" <?= ($ville == $v) ? 'selected' : '' ?>><?= $v ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+
+                    <div class="field">
+                        <label>Arrivée</label>
+                        <input type="date" name="date_debut" value="<?= htmlspecialchars($date_debut) ?>" min="<?= date('Y-m-d') ?>" required>
+                    </div>
+                    <div class="field">
+                        <label>Sortie</label>
+                        <input type="date" name="date_fin" value="<?= htmlspecialchars($date_fin) ?>" min="<?= date('Y-m-d') ?>" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Capacité</label>
+                        <select name="capacite">
+                            <option value="">Pers.</option>
+                            <?php for($i=1; $i<=6; $i++): ?>
+                                <option value="<?= $i ?>" <?= ($capacite == $i) ? 'selected' : '' ?>><?= $i ?> pers.</option>
+                            <?php endfor; ?>
+                        </select>
+                    </div>
+                </div>
                     <button type="submit" class="btn-search">Rechercher →</button>
                 </form>
             </div>
@@ -523,6 +529,28 @@ if (isset($_GET['ville'])) {
                 <?php endif; ?>
             </section>
 
+        </div>
+        <?php
+
+        $res_stats = pg_query($conn, "SELECT * FROM vue_dispo_par_ville WHERE total_dispo > 0 ORDER BY total_dispo DESC");
+        $city_stats = pg_fetch_all($res_stats) ?: [];
+        ?>
+
+        <div class="main" style="display: block;"> <h2 class="stats-header">Disponibilités en temps réel</h2>
+            
+            <div class="stats-grid">
+                <?php foreach ($city_stats as $stat): ?>
+                    <div class="stat-card">
+                        <span class="city-name"><?= htmlspecialchars($stat['ville']) ?></span>
+                        <div class="count"><?= $stat['total_dispo'] ?></div>
+                        <div class="label">chambres libres</div>
+                    </div>
+                <?php endforeach; ?>
+                
+                <?php if (empty($city_stats)): ?>
+                    <p style="color: var(--muted); font-style: italic;">Aucune donnée de disponibilité pour le moment.</p>
+                <?php endif; ?>
+            </div>
         </div>
 
     </body>

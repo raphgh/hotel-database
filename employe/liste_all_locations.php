@@ -96,7 +96,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <form action="supprime_location.php" method="POST">
                                     <input type="hidden" name="id_location" value="<?php echo $res['id_location']; ?>">
                                     <button type="submit" class="btn-cancel">
-                                        Annuler
+                                        Annuler / Check-out
                                     </button>
                                 </form>
                             </div>

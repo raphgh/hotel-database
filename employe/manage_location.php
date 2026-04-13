@@ -11,18 +11,39 @@ $id_hotel = $_SESSION['id_hotel'];
 $results = [];
 
 $capacite = $_GET['capacite'] ?? '';
-$query = "SELECT * FROM Chambre WHERE id_hotel = $1";
+$date_in = $_GET['date_checkin'] ?? date('Y-m-d'); 
+$date_out = $_GET['date_check_out'] ?? date('Y-m-d', strtotime('+1 day')); 
+
+$query = "SELECT * FROM Chambre c WHERE id_hotel = $1";
 $params = [$id_hotel];
+$count = 2;
+
+$query .= " AND c.disponibilite = 'libre'"; 
+
+$query .= " AND c.num_chambre NOT IN (
+    SELECT num_chambre FROM reservation 
+    WHERE id_hotel = $1 
+    AND date_debut < $" . ($count + 1) . " 
+    AND date_fin > $" . $count . "
+)";
+
+$params[] = $date_in;  
+$params[] = $date_out;
+$count += 2;
 
 if (!empty($capacite)) {
-    $query .= " AND capacite = $2";
+    $query .= " AND capacite = $" . $count;
     $params[] = (int)$capacite;
+    $count++;
 }
+
+$query .= " ORDER BY num_chambre ASC";
 
 $res = pg_query_params($conn, $query, $params);
 $results = pg_fetch_all($res) ?: [];
 $current_page = basename($_SERVER['PHP_SELF']);
-?>
+?>>
+
 <!DOCTYPE html>
 <html>
     <head>
