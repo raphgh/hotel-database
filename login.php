@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = 'employe';
             $_SESSION['user_id'] = $user['id_employe'];
             $_SESSION['id_hotel'] = $user['id_hotel'];
+            $_SESSION['id_chaine'] = $user['id_chaine'];
             header("Location: employe/liste_all_reservation.php");
             exit();
         } else {

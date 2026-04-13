@@ -34,7 +34,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <nav>
             <h1>auberge.com</h1>
             <div style="display: flex; gap: 10px; align-items: center;">
-                <a href="index.php">&#127968</a>
         
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="../logout.php">Déconnexion</a>
@@ -48,13 +47,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <div class="main" style="display: block; max-width: 900px; margin: 40px auto;">
 
-            <div class="employee-tabs">
-                <a href="liste_all_reservation.php" class="tab-btn <?php echo ($current_page == 'liste_all_reservation.php') ? 'active' : ''; ?>">Convertir Réservation</a>
-                <a href="liste_archives.php" class="tab-btn <?php echo ($current_page == 'liste_archives.php') ? 'active' : ''; ?>">Archives</a>
-                <a href="manage_location.php" class="tab-btn <?php echo ($current_page == 'manage_location.php') ? 'active' : ''; ?>">Gérer locations</a>
-                <a href="modifie_chambre.php" class="tab-btn <?php echo ($current_page == 'modifie_chambre.php') ? 'active' : ''; ?>">Modifier une chambre</a>
-                <a href="vues.php" class="tab-btn <?php echo ($current_page == 'vues.php') ? 'active' : ''; ?>">Capacité Totale</a>
-            </div>
+        <div class="employee-tabs">
+            <a href="liste_all_reservation.php" class="tab-btn <?php echo ($current_page == 'liste_all_reservation.php') ? 'active' : ''; ?>">Réservations</a>
+            <a href="liste_all_locations.php" class="tab-btn <?php echo ($current_page == 'liste_all_locations.php') ? 'active' : ''; ?>">Locations</a>
+            <a href="liste_archives.php" class="tab-btn <?php echo ($current_page == 'liste_archives.php') ? 'active' : ''; ?>">Archives</a>
+            <a href="manage_location.php" class="tab-btn <?php echo ($current_page == 'manage_location.php') ? 'active' : ''; ?>">Ajouter locations</a>
+            <a href="modifie_chambre.php" class="tab-btn <?php echo ($current_page == 'modifie_chambre.php') ? 'active' : ''; ?>">Modifier une chambre</a>
+            <a href="vues.php" class="tab-btn <?php echo ($current_page == 'vues.php') ? 'active' : ''; ?>">Capacité Totale</a>
+        </div>
 
             <div class="tab-container">
                 <section>
@@ -90,14 +90,35 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                         <p class="address">Capacité: <?php echo $row['capacite']; ?> personnes</p>
                                     </div>
 
-                                    <div class="card-footer">
-                                        <h1 class="price"><?php echo $row['prix']; ?>$</h1>
-
-                                        <form action="process_walkin.php" method="POST" style="display: flex; gap: 8px;">
+                                    <div class="card-footer" style="padding: 16px 20px; background: #fff; border-top: 1px solid var(--border);">
+                                        <form action="add_location.php" method="POST" style="display: flex; align-items: flex-end; gap: 12px; width: 100%;">
                                             <input type="hidden" name="num_chambre" value="<?php echo $row['num_chambre']; ?>">
-                                            <input type="number" name="id_client" placeholder="ID Client" required 
-                                                style="width: 100px; height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border);">
-                                            <button type="submit" class="btn-reserve">Louer</button>
+                                            <input type="hidden" name="date_check_in" value="<?php echo date('Y-m-d'); ?>">
+                                            
+                                            <div style="flex-grow: 1; padding-bottom: 4px;">
+                                                <h1 class="price"><?php echo $row['prix']; ?>$</h1>
+                                            </div>
+
+                                            <div class="input-container">
+                                                <label style="display: block; font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">
+                                                    Client ID
+                                                </label>
+                                                <input type="number" name="id_client" placeholder="0000" required 
+                                                    style="width: 100px; height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; background: #fafafa;">
+                                            </div>
+
+                                            <div class="input-container">
+                                                <label style="display: block; font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">
+                                                    Date de Sortie
+                                                </label>
+                                                <input type="date" name="date_check_out" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required 
+                                                    style="width: 155px; height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; background: #fafafa; color: #444;">
+                                            </div>
+
+                                            <button type="submit" class="btn-reserve" 
+                                                style="height: 38px; padding: 0 24px; border-radius: 8px; background: var(--accent); color: white; border: none; font-weight: 600; cursor: pointer; margin-bottom: 0;">
+                                                Louer
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

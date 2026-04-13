@@ -12,16 +12,16 @@ if (!isset($_SESSION['id_hotel'])) {
 $id_hotel = $_SESSION['id_hotel'];
 
 $query = "SELECT 
-            r.id_reservation, 
-            r.id_client, 
-            r.num_chambre, 
-            r.date_debut, 
-            r.date_fin, 
+            l.id_location, 
+            l.id_client, 
+            l.num_chambre, 
+            l.date_check_in, 
+            l.date_check_out, 
             c.nom_complet 
-          FROM Reservation r
-          INNER JOIN Client c ON r.id_client = c.id_client
-          WHERE r.id_hotel = $1 
-          ORDER BY r.date_debut ASC";
+          FROM Location l
+          INNER JOIN Client c ON l.id_client = c.id_client
+          WHERE l.id_hotel = $1 
+          ORDER BY l.date_check_in ASC";
 
 $res = pg_query_params($conn, $query, array($id_hotel));
 
@@ -29,7 +29,7 @@ if (!$res) {
     die("Erreur SQL : " . pg_last_error($conn));
 }
 
-$reservations = pg_fetch_all($res) ?: [];
+$locations = pg_fetch_all($res) ?: [];
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
@@ -69,8 +69,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="tab-container">       
         <div class="results-list">
-            <?php if (!empty($reservations)): ?>
-                <?php foreach ($reservations as $res): ?>
+            <?php if (!empty($locations)): ?>
+                <?php foreach ($locations as $res): ?>
                     <div class="horizontal-card">
                         <div class="card-content">
                             <div class="card-header">
@@ -90,13 +90,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <div>
                                     <p style="font-size: 12px; color: var(--muted); text-transform: uppercase;">Séjour</p>
                                     <p style="font-size: 14px; font-weight: 500;">
-                                        Du <?php echo $res['date_debut']; ?> au <?php echo $res['date_fin']; ?>
+                                        Du <?php echo $res['date_check_in']; ?> au <?php echo $res['date_check_out']; ?>
                                     </p>
                                 </div>
-                                <form action="convertir_reservation.php" method="POST">
-                                    <input type="hidden" name="id_reservation" value="<?php echo $res['id_reservation']; ?>">
-                                    <button type="submit" class="btn-reserve">
-                                        Check-in (Convertir)
+                                <form action="supprime_location.php" method="POST">
+                                    <input type="hidden" name="id_location" value="<?php echo $res['id_location']; ?>">
+                                    <button type="submit" class="btn-cancel">
+                                        Annuler
                                     </button>
                                 </form>
                             </div>
@@ -104,7 +104,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="no-results">Aucune réservation trouvée pour cet hôtel.</div>
+                <div class="no-results">Aucune location trouvée pour cet hôtel.</div>
             <?php endif; ?>
         </div>
     </div>

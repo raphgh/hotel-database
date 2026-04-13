@@ -28,7 +28,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <nav>
                 <h1>auberge.com</h1>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <a href="index.php">&#127968</a>
             
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <a href="../logout.php">Déconnexion</a>
@@ -42,13 +41,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <div class="main" style="display: block; max-width: 900px; margin: 40px auto;">
 
-            <div class="employee-tabs">
-                <a href="liste_all_reservation.php" class="tab-btn <?php echo ($current_page == 'liste_all_reservation.php') ? 'active' : ''; ?>">Convertir Réservation</a>
-                <a href="liste_archives.php" class="tab-btn <?php echo ($current_page == 'liste_archives.php') ? 'active' : ''; ?>">Archives</a>
-                <a href="manage_location.php" class="tab-btn <?php echo ($current_page == 'manage_location.php') ? 'active' : ''; ?>">Gérer locations</a>
-                <a href="modifie_chambre.php" class="tab-btn <?php echo ($current_page == 'modifie_chambre.php') ? 'active' : ''; ?>">Modifier une chambre</a>
-                <a href="vues.php" class="tab-btn <?php echo ($current_page == 'vues.php') ? 'active' : ''; ?>">Capacité Totale</a>
-            </div>
+        <div class="employee-tabs">
+            <a href="liste_all_reservation.php" class="tab-btn <?php echo ($current_page == 'liste_all_reservation.php') ? 'active' : ''; ?>">Réservations</a>
+            <a href="liste_all_locations.php" class="tab-btn <?php echo ($current_page == 'liste_all_locations.php') ? 'active' : ''; ?>">Locations</a>
+            <a href="liste_archives.php" class="tab-btn <?php echo ($current_page == 'liste_archives.php') ? 'active' : ''; ?>">Archives</a>
+            <a href="manage_location.php" class="tab-btn <?php echo ($current_page == 'manage_location.php') ? 'active' : ''; ?>">Ajouter locations</a>
+            <a href="modifie_chambre.php" class="tab-btn <?php echo ($current_page == 'modifie_chambre.php') ? 'active' : ''; ?>">Modifier une chambre</a>
+            <a href="vues.php" class="tab-btn <?php echo ($current_page == 'vues.php') ? 'active' : ''; ?>">Capacité Totale</a>
+        </div>
 
             <div class="tab-container">
                 <div class="archive-list">
