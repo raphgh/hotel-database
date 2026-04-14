@@ -33,8 +33,6 @@ BEGIN
 END;
 $$;
 
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -53,7 +51,6 @@ CREATE TABLE public.archive (
     date_fin date,
     id_hotel bigint
 );
-
 
 --
 -- Name: archive_id_archive_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -82,8 +79,6 @@ CREATE TABLE public."chaines_hotelières" (
     telephone character varying(20)
 );
 
-
-
 --
 -- Name: chambre; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -101,7 +96,6 @@ CREATE TABLE public.chambre (
     disponibilite character varying(20) DEFAULT 'libre'::character varying
 );
 
-
 --
 -- Name: client; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -117,7 +111,6 @@ CREATE TABLE public.client (
     mot_de_passe character varying(255)
 );
 
-
 --
 -- Name: employe; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -131,7 +124,6 @@ CREATE TABLE public.employe (
     id_hotel bigint,
     mot_de_passe character varying(255)
 );
-
 
 --
 -- Name: hotel; Type: TABLE; Schema: public; Owner: postgres
@@ -148,6 +140,7 @@ CREATE TABLE public.hotel (
     categorie integer,
     nom_hotel character varying(255)
 );
+
 
 --
 -- Name: location; Type: TABLE; Schema: public; Owner: postgres
@@ -196,7 +189,6 @@ CREATE TABLE public.reservation (
     id_chaine bigint
 );
 
-
 --
 -- Name: reservation_id_reservation_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
@@ -221,7 +213,6 @@ CREATE VIEW public.vue_capacite_hotel_header AS
     sum(chambre.capacite) AS capacite_totale
    FROM public.chambre
   GROUP BY chambre.id_hotel;
-
 
 --
 -- Name: vue_capacite_hotels; Type: VIEW; Schema: public; Owner: amykayrala
@@ -250,7 +241,6 @@ CREATE VIEW public.vue_details_chambres AS
    FROM (public.chambre c
      JOIN public.hotel h USING (id_hotel));
 
-
 --
 -- Name: vue_dispo_par_ville; Type: VIEW; Schema: public; Owner: amykayrala
 --
@@ -262,7 +252,6 @@ CREATE VIEW public.vue_dispo_par_ville AS
      JOIN public.chambre c ON ((h.id_hotel = c.id_hotel)))
   WHERE ((c.disponibilite)::text = 'libre'::text)
   GROUP BY (TRIM(BOTH FROM split_part((h.adresse)::text, ','::text, 2)));
-
 
 --
 -- Name: vue_liste_chambres_complete; Type: VIEW; Schema: public; Owner: amykayrala
@@ -277,7 +266,6 @@ CREATE VIEW public.vue_liste_chambres_complete AS
     chambre.etat
    FROM public.chambre;
 
-
 --
 -- Data for Name: archive; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -291,6 +279,8 @@ COPY public.archive (id_archive, type, id_client, id_reservation, id_location, d
 176	reservation	1000	13	\N	2026-04-13	2026-04-14	8
 178	location	1000	\N	9	2026-04-13	2026-04-14	5
 180	reservation	1000	16	\N	2026-04-13	2026-04-14	5
+184	location	1000	\N	14	2026-04-13	2026-04-15	5
+186	location	1000	\N	16	2026-04-13	2026-04-15	14
 92	location	1000	\N	1000	2024-01-15	2024-01-18	1
 93	location	1001	\N	1001	2024-01-20	2024-01-23	2
 94	location	1002	\N	1002	2024-02-03	2024-02-06	3
@@ -377,6 +367,8 @@ COPY public.archive (id_archive, type, id_client, id_reservation, id_location, d
 179	location	1000	\N	10	2026-04-13	2026-04-14	5
 181	location	1000	\N	11	2026-04-13	2026-04-14	35
 183	location	1000	\N	12	2026-04-13	2026-04-14	35
+185	location	1000	\N	15	2026-04-13	2026-04-16	5
+187	reservation	1000	20	\N	2026-04-13	2026-04-14	14
 \.
 
 
@@ -421,8 +413,6 @@ COPY public.chambre (num_chambre, id_hotel, id_chaine, prix, commodites, capacit
 104	4	1	300	TV, Climatisation, WiFi, Minibar, Balcon	4	Panoramique	t	légères égratignures	libre
 105	4	1	450	TV, Climatisation, WiFi, Minibar, Salon	6	Mer	t	bon état	libre
 103	5	1	220	TV, Climatisation, WiFi, Minibar	2	Ville	t	bon état	libre
-104	5	1	280	TV, Climatisation, WiFi, Minibar, Balcon	3	Montagne	t	robinet cassé	libre
-105	5	1	370	TV, Climatisation, WiFi, Minibar	4	Panoramique	t	bon état	libre
 106	5	1	490	TV, Climatisation, WiFi, Minibar, Salon	6	Mer	t	bon état	libre
 101	6	1	100	TV, Climatisation, WiFi	1	Ville	f	bon état	libre
 102	6	1	140	TV, Climatisation, WiFi, Minibar	2	Jardin	f	légères égratignures	libre
@@ -460,6 +450,8 @@ COPY public.chambre (num_chambre, id_hotel, id_chaine, prix, commodites, capacit
 102	7	1	120	TV, Climatisation, WiFi, Minibar	2	Jardin	f	bon état yay	libre
 101	7	1	90	TV, Climatisation, WiFi	1	Ville	f	bon état	libre
 102	5	1	170	TV, Climatisation, WiFi, Minibar	2	Jardin	f	bon état 	libre
+104	5	1	280	TV, Climatisation, WiFi, Minibar, Balcon	3	Montagne	t	bon etat	libre
+105	5	1	370	TV, Climatisation, WiFi, Minibar	4	Panoramique	t	bon état	libre
 101	12	2	155	TV, Climatisation, WiFi	1	Ville	f	bon état	libre
 102	12	2	205	TV, Climatisation, WiFi, Minibar	2	Ville	f	bon état	libre
 103	12	2	255	TV, Climatisation, WiFi, Minibar	2	Jardin	t	bon état	libre
@@ -471,10 +463,7 @@ COPY public.chambre (num_chambre, id_hotel, id_chaine, prix, commodites, capacit
 103	13	2	205	TV, Climatisation, WiFi, Minibar	2	Jardin	t	légères égratignures	libre
 104	13	2	275	TV, Climatisation, WiFi, Minibar, Balcon	4	Panoramique	t	bon état	libre
 105	13	2	395	TV, Climatisation, WiFi, Minibar, Salon	6	Mer	t	bon état	libre
-101	14	2	105	TV, Climatisation, WiFi	1	Ville	f	bon état	libre
 102	14	2	145	TV, Climatisation, WiFi, Minibar	2	Jardin	f	bon état	libre
-103	14	2	185	TV, Climatisation, WiFi, Minibar	2	Ville	t	robinet cassé	libre
-104	14	2	245	TV, Climatisation, WiFi, Minibar, Balcon	3	Montagne	t	bon état	libre
 105	14	2	320	TV, Climatisation, WiFi, Minibar	4	Mer	t	bon état	libre
 106	14	2	440	TV, Climatisation, WiFi, Minibar, Salon	6	Panoramique	t	bon état	libre
 101	15	2	95	TV, Climatisation, WiFi	1	Mer	f	bon état	libre
@@ -523,6 +512,9 @@ COPY public.chambre (num_chambre, id_hotel, id_chaine, prix, commodites, capacit
 103	22	3	185	TV, Climatisation, WiFi, Minibar	2	Ville	t	bon état	libre
 104	22	3	245	TV, Climatisation, WiFi, Minibar, Balcon	4	Montagne	t	bon état	libre
 103	16	2	200	TV, Climatisation, WiFi, Minibar	2	Ville	t	tache sur tapis	libre
+101	14	2	105	TV, Climatisation, WiFi	1	Ville	f	bon état	occupée
+104	14	2	245	TV, Climatisation, WiFi, Minibar, Balcon	3	Montagne	t	bon état	libre
+103	14	2	185	TV, Climatisation, WiFi, Minibar	2	Ville	t	bon etat	libre
 105	22	3	355	TV, Climatisation, WiFi, Minibar, Salon	6	Panoramique	t	bon état	libre
 101	23	3	120	TV, Climatisation, WiFi	1	Mer	f	bon état	libre
 102	23	3	165	TV, Climatisation, WiFi, Minibar	2	Mer	f	bon état	libre
@@ -799,6 +791,7 @@ COPY public.hotel (id_hotel, id_chaine, adresse, no_chambre, email, telephone, i
 --
 
 COPY public.location (date_check_in, date_check_out, status, num_chambre, id_reservation, id_employe, id_client, id_hotel, id_chaine, id_location) FROM stdin;
+2026-04-13	2026-04-14	active	101	\N	2026	1002	14	\N	17
 \.
 
 
@@ -807,6 +800,7 @@ COPY public.location (date_check_in, date_check_out, status, num_chambre, id_res
 --
 
 COPY public.reservation (id_reservation, date_debut, date_fin, status, num_chambre, id_client, id_hotel, id_chaine) FROM stdin;
+21	2026-04-13	2026-04-14	processed	103	1000	5	1
 \.
 
 
@@ -814,21 +808,21 @@ COPY public.reservation (id_reservation, date_debut, date_fin, status, num_chamb
 -- Name: archive_id_archive_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.archive_id_archive_seq', 183, true);
+SELECT pg_catalog.setval('public.archive_id_archive_seq', 187, true);
 
 
 --
 -- Name: location_id_location_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.location_id_location_seq', 13, true);
+SELECT pg_catalog.setval('public.location_id_location_seq', 17, true);
 
 
 --
 -- Name: reservation_id_reservation_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.reservation_id_reservation_seq', 17, true);
+SELECT pg_catalog.setval('public.reservation_id_reservation_seq', 21, true);
 
 
 --
@@ -900,6 +894,13 @@ ALTER TABLE ONLY public.reservation
 --
 
 CREATE INDEX idx_chambre_dispo ON public.chambre USING btree (disponibilite);
+
+
+--
+-- Name: idx_chambre_hotel; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_chambre_hotel ON public.chambre USING btree (id_hotel);
 
 
 --
@@ -1014,4 +1015,5 @@ ALTER TABLE ONLY public.reservation
 --
 -- PostgreSQL database dump complete
 --
+
 
